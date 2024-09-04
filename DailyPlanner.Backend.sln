@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{5D46DE33-EED2-4483-A312-44B39B4DB113}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{FACCDD08-74D3-4180-84A6-54FBEBD6DFA6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{E595872E-43FC-4B60-8B64-CB09A1BB23D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.API", "DailyPlanner.API\DailyPlanner.API.csproj", "{1DB77954-82A0-4BD0-BA97-2BF892665868}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1DB77954-82A0-4BD0-BA97-2BF892665868} = {E595872E-43FC-4B60-8B64-CB09A1BB23D1}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1DB77954-82A0-4BD0-BA97-2BF892665868}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DB77954-82A0-4BD0-BA97-2BF892665868}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DB77954-82A0-4BD0-BA97-2BF892665868}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DB77954-82A0-4BD0-BA97-2BF892665868}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

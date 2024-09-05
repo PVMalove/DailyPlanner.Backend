@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.API", "DailyPl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.Domain", "DailyPlanner.Domain\DailyPlanner.Domain.csproj", "{971ABA4C-7174-4AB8-9CBA-E75CEE2AA95A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.Persistence", "DailyPlanner.Persistence\DailyPlanner.Persistence.csproj", "{9633E920-8748-4787-8EE3-202B15D23FFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.Application", "DailyPlanner.Application\DailyPlanner.Application.csproj", "{A809AA70-CA1E-4BF7-B030-1A42BFFAA040}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +22,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1DB77954-82A0-4BD0-BA97-2BF892665868} = {E595872E-43FC-4B60-8B64-CB09A1BB23D1}
 		{971ABA4C-7174-4AB8-9CBA-E75CEE2AA95A} = {5D46DE33-EED2-4483-A312-44B39B4DB113}
+		{9633E920-8748-4787-8EE3-202B15D23FFE} = {FACCDD08-74D3-4180-84A6-54FBEBD6DFA6}
+		{A809AA70-CA1E-4BF7-B030-1A42BFFAA040} = {5D46DE33-EED2-4483-A312-44B39B4DB113}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1DB77954-82A0-4BD0-BA97-2BF892665868}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -28,5 +34,13 @@ Global
 		{971ABA4C-7174-4AB8-9CBA-E75CEE2AA95A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{971ABA4C-7174-4AB8-9CBA-E75CEE2AA95A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{971ABA4C-7174-4AB8-9CBA-E75CEE2AA95A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9633E920-8748-4787-8EE3-202B15D23FFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9633E920-8748-4787-8EE3-202B15D23FFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9633E920-8748-4787-8EE3-202B15D23FFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9633E920-8748-4787-8EE3-202B15D23FFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A809AA70-CA1E-4BF7-B030-1A42BFFAA040}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A809AA70-CA1E-4BF7-B030-1A42BFFAA040}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A809AA70-CA1E-4BF7-B030-1A42BFFAA040}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A809AA70-CA1E-4BF7-B030-1A42BFFAA040}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

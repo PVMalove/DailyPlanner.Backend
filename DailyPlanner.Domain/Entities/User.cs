@@ -1,6 +1,6 @@
 ﻿using DailyPlanner.Domain.Interfaces;
 
-namespace DailyPlanner.Domain.Entity;
+namespace DailyPlanner.Domain.Entities;
 
 public class User : IEntityId<long>, IAuditable
 {

@@ -1,18 +1,20 @@
+using DailyPlanner.API.Extensions;
 using DailyPlanner.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+IServiceCollection services = builder.Services;
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddPersistence(builder.Configuration);
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 var app = builder.Build();
-
-
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    await app.DbInitializer();
 }
 
 app.UseHttpsRedirection();

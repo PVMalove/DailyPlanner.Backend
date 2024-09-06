@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DailyPlanner.Domain.Entities;
+using DailyPlanner.Domain.Interfaces.Repository;
+using DailyPlanner.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,10 +12,10 @@ public static class Inject
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DbConnection");
-        services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-        
-        
-        
+        services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddScoped<ApplicationDbContext>();
+        services.AddScoped<IBaseRepository<User>, BaseRepository<User>>();
+        services.AddScoped<IBaseRepository<Report>, BaseRepository<Report>>();
         return services;
     }
 }

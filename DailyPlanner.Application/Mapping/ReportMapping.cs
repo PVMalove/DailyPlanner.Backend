@@ -6,7 +6,7 @@ namespace DailyPlanner.Application.Mapping;
 
 public class ReportMapping : Profile
 {
-    protected ReportMapping()
+    public ReportMapping()
     {
         CreateMap<Report, ReportDto>().ReverseMap();
     }

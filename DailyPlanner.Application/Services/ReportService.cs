@@ -113,7 +113,7 @@ public class ReportService : IReportService
             {
                 Name = reportDto.Name,
                 Description = reportDto.Description,
-                UserId = user.Id
+                UserId = user!.Id
             };
             
             await reportRepository.CreateAsync(report);
@@ -146,7 +146,7 @@ public class ReportService : IReportService
                 return new BaseResult<ReportDto>(result.ErrorMessage, result.ErrorCode);
             }
             
-            report.Name = reportDto.Name;
+            report!.Name = reportDto.Name;
             report.Description = reportDto.Description;
             
             reportRepository.Update(report);
@@ -179,7 +179,7 @@ public class ReportService : IReportService
                 return new BaseResult<ReportDto>(result.ErrorMessage, result.ErrorCode);
             }
             
-            reportRepository.Remove(report);
+            reportRepository.Remove(report!);
             await reportRepository.SaveChangesAsync();
             
             return new BaseResult<ReportDto>(data: mapper.Map<ReportDto>(report));

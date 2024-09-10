@@ -3,28 +3,22 @@
 namespace DailyPlanner.Domain.Result;
 
 
-public class BaseResult(string errorMessage, ErrorCodes errorCode)
+public class BaseResult(string errorMessage = null, ErrorCodes? errorCode = null)
 {
-    /// <summary>
-    /// Возвращает true, если операция была успешной, false - если произошла ошибка.
-    /// </summary>
     public bool IsSuccess => string.IsNullOrEmpty(ErrorMessage);
-    public string ErrorMessage { get; init; } = errorMessage ?? string.Empty;
-    public ErrorCodes ErrorCode { get; init; } = errorCode;
-    
-    public BaseResult() : this(string.Empty, ErrorCodes.None) { }
+    public string ErrorMessage { get; init; } = errorMessage;
+    public ErrorCodes? ErrorCode { get; init; } = errorCode;
+
+    public BaseResult() : this(null) { }
 }
 
-public class BaseResult<T> : BaseResult
+public class BaseResult<T>(string errorMessage = null, ErrorCodes? errorCode = null)
+    : BaseResult(errorMessage, errorCode)
 {
     public T Data { get; init; }
-    
-    public BaseResult(string errorMessage, ErrorCodes errorCode):
-        base(errorMessage, errorCode) 
-    { }
-    
+
     public BaseResult(T data)
-        : this(string.Empty, ErrorCodes.None)
+        : this()
     {
         Data = data;
     }

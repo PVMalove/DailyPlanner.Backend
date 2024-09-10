@@ -3,16 +3,13 @@
 namespace DailyPlanner.Domain.Result;
 
 
-public class CollectionResult<T> : BaseResult<IEnumerable<T>>
+public class CollectionResult<T>(string errorMessage = null, ErrorCodes? errorCode = null)
+    : BaseResult<IEnumerable<T>>(errorMessage, errorCode)
 {
     public int Count { get; }
-    
-    public CollectionResult(string errorMessage, ErrorCodes errorCode) 
-        : base(errorMessage, errorCode)
-    { }
 
-    public CollectionResult(IEnumerable<T> data, int count)
-        : this(string.Empty, ErrorCodes.None)
+    public CollectionResult(int count)
+        : this()
     {
         Count = count;
     }

@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>false</InvariantGlobalization>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>206fa905-5732-43d7-9cd3-58cefaf07b05</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,6 +28,10 @@
     <ItemGroup>
       <ProjectReference Include="..\DailyPlanner.Application\DailyPlanner.Application.csproj" />
       <ProjectReference Include="..\DailyPlanner.Persistence\DailyPlanner.Persistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="logs\" />
     </ItemGroup>
 
 </Project>

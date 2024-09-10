@@ -35,7 +35,7 @@ public class ReportService : IReportService
     {
         try
         {
-            var reports = await reportRepository.GetAll()
+            var reports = await reportRepository.GetAll().AsNoTracking()
                 .Where(report => report.UserId == userId)
                 .Select(report =>
                     new ReportDto(report.Id, report.Name, report.Description, report.CreatedAt.ToLongDateString()))
@@ -43,9 +43,7 @@ public class ReportService : IReportService
 
             if (reports.Length > 0)
             {
-                return new CollectionResult<ReportDto>(
-                    data: reports,
-                    count: reports.Length);
+                return new CollectionResult<ReportDto>(count: reports.Length);
             }
 
             logger.Warning(ErrorMessage.ReportsNotFound, reports.Length);
@@ -66,11 +64,13 @@ public class ReportService : IReportService
     {
         try
         {
-            var report = await reportRepository.GetAll()
+            var reports  = await reportRepository.GetAll().AsNoTracking()
                 .Where(report => report.Id == id)
-                .Select(report =>
+                .ToListAsync();
+            
+            var report = reports.Select(report =>
                     new ReportDto(report.Id, report.Name, report.Description, report.CreatedAt.ToLongDateString()))
-                .FirstOrDefaultAsync(dto => dto.Id == id);
+                .FirstOrDefault(dto => dto.Id == id);
             
             if (report is not null)
             {
@@ -143,6 +143,7 @@ public class ReportService : IReportService
             if (!result.IsSuccess)
             {
                 logger.Warning($"{ErrorMessage.ReportNotFound} - Id: {reportDto.Id}", reportDto.Id);
+                //return new BaseResult<ReportDto>(result.ErrorMessage, result.ErrorCode);
                 return new BaseResult<ReportDto>(result.ErrorMessage, result.ErrorCode);
             }
             

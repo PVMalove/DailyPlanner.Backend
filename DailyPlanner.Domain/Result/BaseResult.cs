@@ -9,7 +9,7 @@ public class BaseResult(string errorMessage = null, ErrorCodes? errorCode = null
     public string ErrorMessage { get; init; } = errorMessage;
     public ErrorCodes? ErrorCode { get; init; } = errorCode;
 
-    public BaseResult() : this(null) { }
+    public BaseResult() : this(null, null) { }
 }
 
 public class BaseResult<T>(string errorMessage = null, ErrorCodes? errorCode = null)

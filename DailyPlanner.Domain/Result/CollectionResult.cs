@@ -8,9 +8,10 @@ public class CollectionResult<T>(string errorMessage = null, ErrorCodes? errorCo
 {
     public int Count { get; }
 
-    public CollectionResult(int count)
+    public CollectionResult(IEnumerable<T> data, int count)
         : this()
     {
+        Data = data;
         Count = count;
     }
 }

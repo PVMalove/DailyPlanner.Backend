@@ -13,7 +13,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(user => user.Password).IsRequired();
         builder.HasMany<Report>(user => user.Reports)
             .WithOne(report => report.User)
-            .HasForeignKey(report => report.Id)
+            .HasForeignKey(report => report.UserId)
             .HasPrincipalKey(user => user.Id);
     }
 }

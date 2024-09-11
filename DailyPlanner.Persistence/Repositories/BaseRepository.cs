@@ -2,10 +2,15 @@
 
 namespace DailyPlanner.Persistence.Repositories;
 
-public class BaseRepository<TEntity>(ApplicationDbContext dbContext) : IBaseRepository<TEntity>
-    where TEntity : class
+public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
 {
-    private readonly ApplicationDbContext dbContext = dbContext;
+
+    private readonly ApplicationDbContext dbContext;
+
+    public BaseRepository(ApplicationDbContext dbContext)
+    {
+        this.dbContext = dbContext;
+    }
 
     public IQueryable<TEntity> GetAll()
     {
@@ -15,7 +20,6 @@ public class BaseRepository<TEntity>(ApplicationDbContext dbContext) : IBaseRepo
     public async Task<TEntity> CreateAsync(TEntity entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
-        
         await dbContext.AddAsync(entity);
         return entity;
     }

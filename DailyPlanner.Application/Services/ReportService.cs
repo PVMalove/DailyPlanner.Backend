@@ -43,7 +43,7 @@ public class ReportService : IReportService
 
             if (reports.Length > 0)
             {
-                return new CollectionResult<ReportDto>(count: reports.Length);
+                return new CollectionResult<ReportDto>(reports, reports.Length);
             }
 
             logger.Warning(ErrorMessage.ReportsNotFound, reports.Length);
@@ -96,7 +96,7 @@ public class ReportService : IReportService
     {
         try
         {
-            var user = await userRepository.GetAll()
+            var user = await userRepository.GetAll().AsNoTracking()
                 .FirstOrDefaultAsync(user => user.Id == reportDto.UserId);
            
             var report = await reportRepository.GetAll()

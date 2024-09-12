@@ -1,0 +1,68 @@
+﻿using System.Reflection;
+using Asp.Versioning.ApiExplorer;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+namespace DailyPlanner.API.Configurations;
+
+public class ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider) : IConfigureOptions<SwaggerGenOptions>
+{
+    public void Configure(SwaggerGenOptions options)
+    {
+        foreach (var description in provider.ApiVersionDescriptions)
+        {
+            var apiVersion = description.ApiVersion.ToString();
+            options.SwaggerDoc(description.GroupName, new OpenApiInfo
+            {
+                Version = apiVersion,
+                Title = "Daily Planner Api",
+                Description = "An ASP.NET Core Web API for managing daily Planner.",
+                Contact = new OpenApiContact
+                {
+                    Name = "Malove",
+                    Email = "p.malove@yandex.ru",
+                    Url = new Uri("https://t.me/maloveee"),
+                }
+            });
+
+            options.AddSecurityDefinition($"AuthToken {apiVersion}",
+                new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer",
+                    Name = "Authorization",
+                    Description =
+                        "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                });
+            
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = $"AuthToken {apiVersion}",
+                        },
+                        In = ParameterLocation.Header,
+                        Name = "Authorization",
+                    },
+                    Array.Empty<string>()
+                }
+            });
+            
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            options.IncludeXmlComments(xmlPath);
+            
+            options.CustomOperationIds(apiDescription =>
+                apiDescription.TryGetMethodInfo(out MethodInfo? methodInfo) 
+                    ? methodInfo!.Name 
+                    : null);
+        }
+    }
+}

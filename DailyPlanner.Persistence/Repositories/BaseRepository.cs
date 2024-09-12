@@ -2,16 +2,9 @@
 
 namespace DailyPlanner.Persistence.Repositories;
 
-public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
+public class BaseRepository<TEntity>(ApplicationDbContext dbContext) : IBaseRepository<TEntity>
+    where TEntity : class
 {
-
-    private readonly ApplicationDbContext dbContext;
-
-    public BaseRepository(ApplicationDbContext dbContext)
-    {
-        this.dbContext = dbContext;
-    }
-
     public IQueryable<TEntity> GetAll()
     {
         return dbContext.Set<TEntity>();

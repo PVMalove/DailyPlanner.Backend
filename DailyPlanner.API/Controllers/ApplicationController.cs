@@ -3,5 +3,5 @@
 namespace DailyPlanner.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/{version:apiVersion}/[controller]")]
 public abstract class ApplicationController : ControllerBase {}

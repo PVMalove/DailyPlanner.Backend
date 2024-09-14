@@ -9,4 +9,6 @@ public enum ErrorCodes
     ReportAlreadyExists = 3,
     InternalServerError = 10,
     UserNotFound = 11,
+    UserAlreadyExists = 12,
+    PasswordsNotMatch = 21,
 }

@@ -19,6 +19,7 @@ public static class Inject
         services.AddScoped<IReportValidator, ReportValidator>();
         services.AddScoped<IValidator<CreateReportDto>, CreateReportValidator>();
         services.AddScoped<IValidator<UpdateReportDto>, UpdateReportValidator>();
+        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IReportService, ReportService>();
         
         return services;

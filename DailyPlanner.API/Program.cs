@@ -1,5 +1,4 @@
 using Asp.Versioning.ApiExplorer;
-using DailyPlanner.API;
 using DailyPlanner.API.Extensions;
 using Serilog;
 

@@ -69,6 +69,15 @@ namespace DailyPlanner.Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Не верный пароль.
+        /// </summary>
+        internal static string PasswordIsNotCorrect {
+            get {
+                return ResourceManager.GetString("PasswordIsNotCorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Пароли не совпадают.
         /// </summary>
         internal static string PasswordsNotMatch {

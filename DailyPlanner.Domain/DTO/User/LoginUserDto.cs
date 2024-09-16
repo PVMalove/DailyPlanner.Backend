@@ -1,6 +1,3 @@
 ﻿namespace DailyPlanner.Domain.DTO.User;
 
-public class LoginUserDto
-{
-    
-}
+public record LoginUserDto(string Login, string Password);

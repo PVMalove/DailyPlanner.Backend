@@ -11,4 +11,5 @@ public enum ErrorCodes
     UserNotFound = 11,
     UserAlreadyExists = 12,
     PasswordsNotMatch = 21,
+    PasswordIsNotCorrect = 22,
 }

@@ -69,6 +69,15 @@ namespace DailyPlanner.Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Неверный запрос клиента.
+        /// </summary>
+        internal static string InvalidClientRequest {
+            get {
+                return ResourceManager.GetString("InvalidClientRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Не верный пароль.
         /// </summary>
         internal static string PasswordIsNotCorrect {

@@ -3,6 +3,7 @@ using System;
 using DailyPlanner.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DailyPlanner.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240917180119_Add_UserToken")]
+    partial class Add_UserToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,7 +99,7 @@ namespace DailyPlanner.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("RefreshTokenExpireTime")
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("UserId")
@@ -104,8 +107,7 @@ namespace DailyPlanner.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserToken");
                 });
@@ -124,8 +126,8 @@ namespace DailyPlanner.Persistence.Migrations
             modelBuilder.Entity("DailyPlanner.Domain.Entities.UserToken", b =>
                 {
                     b.HasOne("DailyPlanner.Domain.Entities.User", "User")
-                        .WithOne("UserToken")
-                        .HasForeignKey("DailyPlanner.Domain.Entities.UserToken", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -135,8 +137,6 @@ namespace DailyPlanner.Persistence.Migrations
             modelBuilder.Entity("DailyPlanner.Domain.Entities.User", b =>
                 {
                     b.Navigation("Reports");
-
-                    b.Navigation("UserToken");
                 });
 #pragma warning restore 612, 618
         }

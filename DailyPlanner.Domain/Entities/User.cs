@@ -8,4 +8,5 @@ public class User : IEntityId<long>
     public string Login { get; init; }
     public string Password { get; init; }
     public List<Report> Reports { get; init; }
+    public UserToken UserToken { get; set; }
 }

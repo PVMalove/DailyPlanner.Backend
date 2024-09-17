@@ -15,6 +15,7 @@ public static class Inject
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
         services.AddScoped<IBaseRepository<User>, BaseRepository<User>>();
         services.AddScoped<IBaseRepository<Report>, BaseRepository<Report>>();
+        services.AddScoped<IBaseRepository<UserToken>, BaseRepository<UserToken>>();
         return services;
     }
 }

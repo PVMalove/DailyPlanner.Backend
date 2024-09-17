@@ -10,6 +10,6 @@ public class UserTokenConfiguration : IEntityTypeConfiguration<UserToken>
     {
         builder.Property(t => t.Id).ValueGeneratedOnAdd();
         builder.Property(t => t.RefreshToken).IsRequired();
-        builder.Property(t => t.RefreshTokenExpiryTime).IsRequired();
+        builder.Property(t => t.RefreshTokenExpireTime).IsRequired();
     }
 }

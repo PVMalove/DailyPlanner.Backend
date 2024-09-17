@@ -42,4 +42,7 @@
     <data name="PasswordIsNotCorrect" xml:space="preserve">
         <value>Не верный пароль</value>
     </data>
+    <data name="InvalidClientRequest" xml:space="preserve">
+        <value>Неверный запрос клиента</value>
+    </data>
 </root>

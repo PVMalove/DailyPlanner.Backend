@@ -1,5 +1,6 @@
 using Asp.Versioning.ApiExplorer;
 using DailyPlanner.API.Extensions;
+using DailyPlanner.API.Middlewares;
 using Serilog;
 
 
@@ -28,6 +29,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseCors(x=> x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();

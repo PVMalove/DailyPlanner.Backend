@@ -10,6 +10,7 @@ public enum ErrorCodes
     InternalServerError = 10,
     UserNotFound = 11,
     UserAlreadyExists = 12,
+    UserUnauthorizedAccess = 13,
     PasswordsNotMatch = 21,
     PasswordIsNotCorrect = 22,
 }

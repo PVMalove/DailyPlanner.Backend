@@ -22,7 +22,7 @@ public static class Inject
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IReportService, ReportService>();
-        
+        services.AddScoped<IRoleService, RoleService>();
         return services;
     }
 }

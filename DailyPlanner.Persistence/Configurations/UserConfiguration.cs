@@ -15,5 +15,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .WithOne(report => report.User)
             .HasForeignKey(report => report.UserId)
             .HasPrincipalKey(user => user.Id);
+        builder.HasMany(u => u.Roles)
+            .WithMany(r => r.Users)
+            .UsingEntity<UserRole>(e => e.HasOne<Role>().WithMany().HasForeignKey(ur => ur.RoleId),
+                e => e.HasOne<User>().WithMany().HasForeignKey(ur => ur.UserId));
     }
 }

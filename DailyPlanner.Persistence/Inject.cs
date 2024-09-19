@@ -16,6 +16,7 @@ public static class Inject
         services.AddScoped<IBaseRepository<User>, BaseRepository<User>>();
         services.AddScoped<IBaseRepository<Report>, BaseRepository<Report>>();
         services.AddScoped<IBaseRepository<UserToken>, BaseRepository<UserToken>>();
+        services.AddScoped<IBaseRepository<Role>, BaseRepository<Role>>();
         return services;
     }
 }

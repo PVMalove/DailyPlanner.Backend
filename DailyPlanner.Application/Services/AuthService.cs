@@ -35,8 +35,6 @@ public class AuthService : IAuthService
     /// <inheritdoc />
     public async Task<BaseResult<UserDto>> Register(RegisterUserDto registerUserDto)
     {
-        throw new UnauthorizedAccessException("ssssss ssssssss ");
-        
         if (!registerUserDto.Password.Equals(registerUserDto.PasswordConfirm))
         {
             logger.Warning(ErrorMessage.PasswordsNotMatch);

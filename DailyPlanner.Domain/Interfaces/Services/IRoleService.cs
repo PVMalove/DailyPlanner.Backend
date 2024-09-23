@@ -11,19 +11,26 @@ public interface IRoleService
     /// </summary>
     /// <param name="roleDto"></param>
     /// <returns></returns>
-    Task<BaseResult<Role>> CreateAsync(RoleDto roleDto);
+    Task<BaseResult<RoleDto>> CreateAsync(CreateRoleDto roleDto);
 
     /// <summary>
     /// Обновление роли.
     /// </summary>
     /// <param name="roleDto"></param>
     /// <returns></returns>
-    Task<BaseResult<Role>> UpdateAsync(RoleDto roleDto);
+    Task<BaseResult<RoleDto>> UpdateAsync(RoleDto roleDto);
     
     /// <summary>
     /// Удаление роли.
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<BaseResult<Role>> DeleteAsync(long id);
+    Task<BaseResult<RoleDto>> DeleteAsync(long id);
+    
+    /// <summary>
+    /// Добавление роли для пользователя.
+    /// </summary>
+    /// <param name="userRoleDto"></param>
+    /// <returns></returns>
+    Task<BaseResult<UserRoleDto>> AddRoleForUserAsync(UserRoleDto userRoleDto);
 }

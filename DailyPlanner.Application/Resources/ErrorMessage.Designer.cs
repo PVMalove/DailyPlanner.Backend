@@ -150,6 +150,15 @@ namespace DailyPlanner.Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to У пользователя уже есть роль.
+        /// </summary>
+        internal static string UserAlreadyHasRole {
+            get {
+                return ResourceManager.GetString("UserAlreadyHasRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Пользователь не найден.
         /// </summary>
         internal static string UserNotFound {

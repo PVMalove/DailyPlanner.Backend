@@ -8,21 +8,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DailyPlanner.API.Controllers;
 
+
 [ApiVersion("2.0")]
 [Consumes(MediaTypeNames.Application.Json)]
-public class RoleController : ApplicationController
+public class RoleController(IRoleService roleService) : ApplicationController
 {
-    private IRoleService roleService;
-
-    public RoleController(IRoleService roleService)
-    {
-        this.roleService = roleService;
-    }
-    
-    [HttpPost]
+    [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<BaseResult<Role>>> GetById([FromBody] RoleDto roleDto)
+    public async Task<ActionResult<BaseResult<Role>>> GetById([FromBody] CreateRoleDto roleDto)
     {
         var response = await roleService.CreateAsync(roleDto);
         if (response.IsSuccess)
@@ -32,7 +26,7 @@ public class RoleController : ApplicationController
         return BadRequest(response);
     }
     
-    [HttpPut]
+    [HttpPut("update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<BaseResult<Role>>> Update([FromBody] RoleDto roleDto)
@@ -45,12 +39,25 @@ public class RoleController : ApplicationController
         return BadRequest(response);
     }
     
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:long}/delete")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<BaseResult<Role>>> Delete(long id)
     {
         var response = await roleService.DeleteAsync(id);
+        if (response.IsSuccess)
+        {
+            return Ok(response);
+        }
+        return BadRequest(response);
+    }
+    
+    [HttpPost("add-role-for-user")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<BaseResult<Role>>> AddRoleForUser([FromBody] UserRoleDto roleDto)
+    {
+        var response = await roleService.AddRoleForUserAsync(roleDto);
         if (response.IsSuccess)
         {
             return Ok(response);

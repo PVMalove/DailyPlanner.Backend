@@ -71,6 +71,7 @@ public class AuthService : IAuthService
     public async Task<BaseResult<TokenDto>> Login(LoginUserDto loginUserDto)
     {
         var user = await userRepository.GetAll().AsNoTracking()
+            .Include(u => u.Roles)
             .FirstOrDefaultAsync(u => u.Login == loginUserDto.Login);
 
         if (user is null)
@@ -92,12 +93,12 @@ public class AuthService : IAuthService
         var userToken = await userTokenRepository.GetAll().AsNoTracking()
             .FirstOrDefaultAsync(t => t.UserId == user.Id);
 
-        var accessToken = tokenService.GenerateAccessToken(new List<Claim>
-        {
-            new(ClaimTypes.Name, user.Login),
-            new(ClaimTypes.Role, "User")
-        });
+        var claims = new List<Claim>();
 
+        claims.AddRange(user.Roles.Select(r => new Claim(ClaimTypes.Role, r.Name)));
+        claims.Add(new Claim(ClaimTypes.Name, user.Login));
+
+        var accessToken = tokenService.GenerateAccessToken(claims);
         var refreshToken = tokenService.GenerateRefreshToken();
 
         if (userToken is null)

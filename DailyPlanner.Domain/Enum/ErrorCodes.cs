@@ -15,4 +15,5 @@ public enum ErrorCodes
     PasswordIsNotCorrect = 22,
     RoleAlreadyExists = 31,
     RoleNotFound = 32,
+    UserAlreadyHasRole = 33,
 }

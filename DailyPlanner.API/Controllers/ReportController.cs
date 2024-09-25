@@ -30,8 +30,8 @@ public class ReportController(IReportService reportService) : ApplicationControl
     /// <response code="400">If the request is not valid</response>
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<BaseResult<ReportDto>>> GetById(long id)
     {
         var response = await reportService.GetReportByIdAsync(id);
@@ -61,6 +61,7 @@ public class ReportController(IReportService reportService) : ApplicationControl
     [HttpGet("{userId:long}/all")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<BaseResult<List<ReportDto>>>> GetByUserId(long userId)
     {
         var response = await reportService.GetReportsAsync(userId);
@@ -90,6 +91,7 @@ public class ReportController(IReportService reportService) : ApplicationControl
     [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<BaseResult<ReportDto>>> Create([FromBody] CreateReportDto reportDto)
     {
         var response = await reportService.CreateReportAsync(reportDto);
@@ -108,6 +110,7 @@ public class ReportController(IReportService reportService) : ApplicationControl
     [HttpPut("update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<BaseResult<ReportDto>>> Update([FromBody] UpdateReportDto reportDto)
     {
         var response = await reportService.UpdateReportAsync(reportDto);
@@ -137,6 +140,7 @@ public class ReportController(IReportService reportService) : ApplicationControl
     [HttpDelete("{id:long}/delete")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<BaseResult<ReportDto>>> DeleteById(long id)
     {
         var response = await reportService.DeleteReportAsync(id);

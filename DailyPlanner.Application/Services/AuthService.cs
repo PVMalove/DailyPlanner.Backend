@@ -18,15 +18,20 @@ public class AuthService : IAuthService
 {
     private readonly IBaseRepository<User> userRepository;
     private readonly IBaseRepository<UserToken> userTokenRepository;
+    private readonly IBaseRepository<Role> roleRepository;
+    private readonly IBaseRepository<UserRole> userRoleRepository;
     private readonly ITokenService tokenService;
     private readonly IMapper mapper;
     private readonly ILogger logger;
 
     public AuthService(IBaseRepository<User> userRepository, IBaseRepository<UserToken> userTokenRepository,
-        ITokenService tokenService, IMapper mapper, ILogger logger)
+        IBaseRepository<Role> roleRepository, IBaseRepository<UserRole> userRoleRepository, ITokenService tokenService,
+        IMapper mapper, ILogger logger)
     {
         this.userRepository = userRepository;
         this.userTokenRepository = userTokenRepository;
+        this.roleRepository = roleRepository;
+        this.userRoleRepository = userRoleRepository;
         this.tokenService = tokenService;
         this.mapper = mapper;
         this.logger = logger;
@@ -64,6 +69,27 @@ public class AuthService : IAuthService
 
         await userRepository.CreateAsync(newUser);
         await userRepository.SaveChangesAsync();
+        
+        var role = await roleRepository.GetAll().AsNoTracking()
+            .FirstOrDefaultAsync(r => r.Name == "Admin");
+        
+        if (role is null)
+        {
+            logger.Warning(ErrorMessage.RoleNotFound);
+            return new BaseResult<UserDto>(
+                errorMessage: ErrorMessage.RoleNotFound,
+                errorCode: ErrorCodes.RoleNotFound);
+        }
+        
+        var userRole = new UserRole
+        {
+            UserId = newUser.Id,
+            RoleId = role.Id
+        };
+        
+        await userRoleRepository.CreateAsync(userRole);
+        await userRoleRepository.SaveChangesAsync();
+        
         return new BaseResult<UserDto>(mapper.Map<UserDto>(newUser));
     }
 

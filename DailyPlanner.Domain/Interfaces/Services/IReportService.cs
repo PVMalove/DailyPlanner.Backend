@@ -1,4 +1,5 @@
 ﻿using DailyPlanner.Domain.DTO.Report;
+using DailyPlanner.Domain.DTO.Role;
 using DailyPlanner.Domain.Result;
 
 namespace DailyPlanner.Domain.Interfaces.Services;

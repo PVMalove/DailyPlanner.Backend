@@ -16,9 +16,9 @@ public class RoleService : IRoleService
     private readonly IBaseRepository<Role> roleRepository;
     private readonly IBaseRepository<UserRole> userRoleRepository;
     private readonly IMapper mapper;
-    
 
-    public RoleService(IBaseRepository<User> userRepository, IBaseRepository<Role> roleRepository, 
+
+    public RoleService(IBaseRepository<User> userRepository, IBaseRepository<Role> roleRepository,
         IBaseRepository<UserRole> userRoleRepository, IMapper mapper)
     {
         this.userRepository = userRepository;
@@ -26,7 +26,7 @@ public class RoleService : IRoleService
         this.userRoleRepository = userRoleRepository;
         this.mapper = mapper;
     }
-    
+
     /// <inheritdoc />
     public async Task<BaseResult<RoleDto>> CreateAsync(CreateRoleDto roleDto)
     {
@@ -70,14 +70,14 @@ public class RoleService : IRoleService
                 ErrorCode = ErrorCodes.RoleNotFound
             };
         }
-        
+
         role.Name = roleDto.Name;
-        roleRepository.Update(role);
+        var updateRole = roleRepository.Update(role);
         await roleRepository.SaveChangesAsync();
-        
+
         return new BaseResult<RoleDto>
         {
-            Data = mapper.Map<RoleDto>(role)
+            Data = mapper.Map<RoleDto>(updateRole)
         };
     }
 
@@ -95,10 +95,10 @@ public class RoleService : IRoleService
                 ErrorCode = ErrorCodes.RoleNotFound
             };
         }
-        
+
         roleRepository.Remove(role);
         await roleRepository.SaveChangesAsync();
-        
+
         return new BaseResult<RoleDto>
         {
             Data = mapper.Map<RoleDto>(role)
@@ -111,7 +111,7 @@ public class RoleService : IRoleService
         var user = await userRepository.GetAll().AsNoTracking()
             .Include(u => u.Roles)
             .FirstOrDefaultAsync(u => u.Login == userRoleDto.Login);
-        
+
         if (user is null)
         {
             return new BaseResult<UserRoleDto>
@@ -127,7 +127,7 @@ public class RoleService : IRoleService
         {
             var role = await roleRepository.GetAll().AsNoTracking()
                 .FirstOrDefaultAsync(r => r.Name == userRoleDto.RoleName);
-            
+
             if (role is null)
             {
                 return new BaseResult<UserRoleDto>
@@ -145,17 +145,57 @@ public class RoleService : IRoleService
 
             await userRoleRepository.CreateAsync(userRole);
             await userRoleRepository.SaveChangesAsync();
-            
-            return new BaseResult<UserRoleDto>
+
+            return new BaseResult<UserRoleDto>()
             {
-                Data = mapper.Map<UserRoleDto>(userRole)
+                Data = new UserRoleDto(user.Login, role.Name)
             };
         }
-        
+
         return new BaseResult<UserRoleDto>
         {
             ErrorMessage = ErrorMessage.UserAlreadyHasRole,
             ErrorCode = ErrorCodes.UserAlreadyHasRole
+        };
+    }
+
+    public async Task<BaseResult<UserRoleDto>> DeleteRoleForUserAsync(UserRoleDto userRoleDto)
+    {
+        var user = await userRepository.GetAll().AsNoTracking()
+            .Include(u => u.Roles)
+            .FirstOrDefaultAsync(u => u.Login == userRoleDto.Login);
+
+        if (user is null)
+        {
+            return new BaseResult<UserRoleDto>
+            {
+                ErrorMessage = ErrorMessage.UserNotFound,
+                ErrorCode = ErrorCodes.UserNotFound
+            };
+        }
+
+        var role = user.Roles.FirstOrDefault(r => r.Name == userRoleDto.RoleName);
+
+        if (role is null)
+        {
+            return new BaseResult<UserRoleDto>
+            {
+                ErrorMessage = ErrorMessage.RoleNotFound,
+                ErrorCode = ErrorCodes.RoleNotFound
+            };
+        }
+
+        var userRole = await userRoleRepository.GetAll().AsNoTracking()
+            .Where(ur => ur.RoleId == role.Id)
+            .FirstOrDefaultAsync(ur => ur.UserId == user.Id);
+
+        if (userRole != null) userRoleRepository.Remove(userRole);
+        
+        await userRoleRepository.SaveChangesAsync();
+
+        return new BaseResult<UserRoleDto>()
+        {
+            Data = new UserRoleDto(user.Login, role.Name)
         };
     }
 }

@@ -33,4 +33,11 @@ public interface IRoleService
     /// <param name="userRoleDto"></param>
     /// <returns></returns>
     Task<BaseResult<UserRoleDto>> AddRoleForUserAsync(UserRoleDto userRoleDto);
+    
+    /// <summary>
+    /// Удаление роли у пользователя.
+    /// </summary>
+    /// <param name="userRoleDto"></param>
+    /// <returns></returns>
+    Task<BaseResult<UserRoleDto>> DeleteRoleForUserAsync(UserRoleDto userRoleDto);
 }

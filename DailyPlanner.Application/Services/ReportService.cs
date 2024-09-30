@@ -7,7 +7,10 @@ using DailyPlanner.Domain.Interfaces.Repository;
 using DailyPlanner.Domain.Interfaces.Services;
 using DailyPlanner.Domain.Interfaces.Validations;
 using DailyPlanner.Domain.Result;
+using DailyPlanner.Domain.Settings;
+using DailyPlanner.Producer.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace DailyPlanner.Application.Services;
@@ -17,15 +20,19 @@ public class ReportService : IReportService
     private readonly IBaseRepository<Report> reportRepository;
     private readonly IBaseRepository<User> userRepository;
     private readonly IReportValidator reportValidator;
+    private readonly IMessageProducer massageProducer;
+    private readonly IOptions<RabbitMqSettings> rabbitMqOptions;
     private readonly IMapper mapper;
-    private readonly ILogger logger;
+    private readonly ILogger? logger;
 
     public ReportService(IBaseRepository<Report> reportRepository, IBaseRepository<User> userRepository,
-        IReportValidator reportValidator, IMapper mapper, ILogger logger)
+        IReportValidator reportValidator, IMessageProducer massageProducer, IOptions<RabbitMqSettings> rabbitMqOptions, IMapper mapper, ILogger? logger)
     {
         this.reportRepository = reportRepository;
         this.userRepository = userRepository;
         this.reportValidator = reportValidator;
+        this.massageProducer = massageProducer;
+        this.rabbitMqOptions = rabbitMqOptions;
         this.mapper = mapper;
         this.logger = logger;
     }
@@ -97,6 +104,8 @@ public class ReportService : IReportService
         await reportRepository.CreateAsync(report);
         await reportRepository.SaveChangesAsync();
 
+        massageProducer.SendMessage(report, rabbitMqOptions.Value.RoutingKey, rabbitMqOptions.Value.ExchangeName);
+
         return new BaseResult<ReportDto>(mapper.Map<ReportDto>(report));
     }
 
@@ -111,19 +120,17 @@ public class ReportService : IReportService
         if (!result.IsSuccess)
         {
             logger.Warning($"{ErrorMessage.ReportNotFound} - Id: {reportDto.Id}", reportDto.Id);
-            //return new BaseResult<ReportDto>(result.ErrorMessage, result.ErrorCode);
             return new BaseResult<ReportDto>(result.ErrorMessage, result.ErrorCode);
         }
 
         report!.Name = reportDto.Name;
         report.Description = reportDto.Description;
 
-        reportRepository.Update(report);
+        var updateReport = reportRepository.Update(report);
         await reportRepository.SaveChangesAsync();
 
-        return new BaseResult<ReportDto>(data: mapper.Map<ReportDto>(report));
+        return new BaseResult<ReportDto>(data: mapper.Map<ReportDto>(updateReport));
     }
-
 
     /// <inheritdoc />
     public async Task<BaseResult<ReportDto>> DeleteReportAsync(long id)

@@ -1,5 +1,7 @@
 ﻿using DailyPlanner.Domain.Entities;
+using DailyPlanner.Domain.Interfaces.Database;
 using DailyPlanner.Domain.Interfaces.Repository;
+using DailyPlanner.Persistence.Database;
 using DailyPlanner.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +20,7 @@ public static class Inject
         services.AddScoped<IBaseRepository<UserToken>, BaseRepository<UserToken>>();
         services.AddScoped<IBaseRepository<Role>, BaseRepository<Role>>();
         services.AddScoped<IBaseRepository<UserRole>, BaseRepository<UserRole>>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }
 }

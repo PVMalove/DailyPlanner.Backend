@@ -2,8 +2,10 @@
 using Asp.Versioning;
 using DailyPlanner.API.Configurations;
 using DailyPlanner.Application;
+using DailyPlanner.Consumer;
 using DailyPlanner.Domain.Settings;
 using DailyPlanner.Persistence;
+using DailyPlanner.Producer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -15,11 +17,12 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddCustomServices(this IServiceCollection services, WebApplicationBuilder builder)
     {
+        builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection(nameof(RabbitMqSettings)));
+        builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.DefaultSection));
+        
         services.AddControllers();
         services.AddPersistence(builder.Configuration);
         services.AddApplication();
-
-        builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.DefaultSection));
 
         services.AddAuthorization();
         services.AddAuthentication(config =>
@@ -61,6 +64,8 @@ public static class ServiceExtensions
         
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        services.AddProducer();
+        services.AddConsumer();
         
         return services;
     }

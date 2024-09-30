@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DailyPlanner.API.Controllers;
 
-
 [ApiVersion("2.0")]
 [Authorize(Roles = "Admin")]
 [Consumes(MediaTypeNames.Application.Json)]
@@ -98,6 +97,20 @@ public class RoleController(IRoleService roleService) : ApplicationController
     public async Task<ActionResult<BaseResult<Role>>> AddRoleForUser([FromBody] UserRoleDto roleDto)
     {
         var response = await roleService.AddRoleForUserAsync(roleDto);
+        if (response.IsSuccess)
+        {
+            return Ok(response);
+        }
+        return BadRequest(response);
+    }
+    
+    [HttpDelete("delete-role-for-user")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<BaseResult<Role>>> DeleteRoleForUser([FromBody] UserRoleDto roleDto)
+    {
+        var response = await roleService.DeleteRoleForUserAsync(roleDto);
         if (response.IsSuccess)
         {
             return Ok(response);

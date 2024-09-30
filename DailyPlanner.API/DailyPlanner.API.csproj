@@ -30,7 +30,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DailyPlanner.Application\DailyPlanner.Application.csproj" />
+      <ProjectReference Include="..\DailyPlanner.Consumer\DailyPlanner.Consumer.csproj" />
       <ProjectReference Include="..\DailyPlanner.Persistence\DailyPlanner.Persistence.csproj" />
+      <ProjectReference Include="..\DailyPlanner.Producer\DailyPlanner.Producer.csproj" />
     </ItemGroup>
 
     <ItemGroup>

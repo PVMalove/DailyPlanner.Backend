@@ -6,6 +6,7 @@ using DailyPlanner.Application.Resources;
 using DailyPlanner.Domain.DTO.User;
 using DailyPlanner.Domain.Entities;
 using DailyPlanner.Domain.Enum;
+using DailyPlanner.Domain.Interfaces.Database;
 using DailyPlanner.Domain.Interfaces.Repository;
 using DailyPlanner.Domain.Interfaces.Services;
 using DailyPlanner.Domain.Result;
@@ -16,22 +17,22 @@ namespace DailyPlanner.Application.Services;
 
 public class AuthService : IAuthService
 {
+    private readonly IUnitOfWork unitOfWork;
     private readonly IBaseRepository<User> userRepository;
     private readonly IBaseRepository<UserToken> userTokenRepository;
     private readonly IBaseRepository<Role> roleRepository;
-    private readonly IBaseRepository<UserRole> userRoleRepository;
     private readonly ITokenService tokenService;
     private readonly IMapper mapper;
     private readonly ILogger logger;
 
-    public AuthService(IBaseRepository<User> userRepository, IBaseRepository<UserToken> userTokenRepository,
-        IBaseRepository<Role> roleRepository, IBaseRepository<UserRole> userRoleRepository, ITokenService tokenService,
-        IMapper mapper, ILogger logger)
+    public AuthService(IUnitOfWork unitOfWork, IBaseRepository<User> userRepository,
+        IBaseRepository<UserToken> userTokenRepository, IBaseRepository<Role> roleRepository,
+        ITokenService tokenService, IMapper mapper, ILogger logger)
     {
+        this.unitOfWork = unitOfWork;
         this.userRepository = userRepository;
         this.userTokenRepository = userTokenRepository;
         this.roleRepository = roleRepository;
-        this.userRoleRepository = userRoleRepository;
         this.tokenService = tokenService;
         this.mapper = mapper;
         this.logger = logger;
@@ -61,36 +62,49 @@ public class AuthService : IAuthService
 
         var hashedPassword = HashPassword(registerUserDto.Password);
 
-        var newUser = new User
+        await using (var transaction = await unitOfWork.BeginTransactionAsync())
         {
-            Login = registerUserDto.Login,
-            Password = hashedPassword
-        };
+            try
+            {
+                user = new User
+                {
+                    Login = registerUserDto.Login,
+                    Password = hashedPassword
+                };
 
-        await userRepository.CreateAsync(newUser);
-        await userRepository.SaveChangesAsync();
+                await unitOfWork.Users.CreateAsync(user);
+                await unitOfWork.SaveChangesAsync();
+                
+                var role = await roleRepository.GetAll().AsNoTracking()
+                    .FirstOrDefaultAsync(r => r.Name == nameof(Roles.User));
         
-        var role = await roleRepository.GetAll().AsNoTracking()
-            .FirstOrDefaultAsync(r => r.Name == "Admin");
+                if (role is null)
+                {
+                    logger.Warning(ErrorMessage.RoleNotFound);
+                    return new BaseResult<UserDto>(
+                        errorMessage: ErrorMessage.RoleNotFound,
+                        errorCode: ErrorCodes.RoleNotFound);
+                }
         
-        if (role is null)
-        {
-            logger.Warning(ErrorMessage.RoleNotFound);
-            return new BaseResult<UserDto>(
-                errorMessage: ErrorMessage.RoleNotFound,
-                errorCode: ErrorCodes.RoleNotFound);
+                var userRole = new UserRole
+                {
+                    UserId = user.Id,
+                    RoleId = role.Id
+                };
+                
+                await unitOfWork.UserRoles.CreateAsync(userRole);
+                
+                await unitOfWork.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                logger.Warning(ex.Message);
+                await transaction.RollbackAsync();
+            }
         }
         
-        var userRole = new UserRole
-        {
-            UserId = newUser.Id,
-            RoleId = role.Id
-        };
-        
-        await userRoleRepository.CreateAsync(userRole);
-        await userRoleRepository.SaveChangesAsync();
-        
-        return new BaseResult<UserDto>(mapper.Map<UserDto>(newUser));
+        return new BaseResult<UserDto>(mapper.Map<UserDto>(user));
     }
 
     /// <inheritdoc />
@@ -123,7 +137,8 @@ public class AuthService : IAuthService
 
         claims.AddRange(user.Roles.Select(r => new Claim(ClaimTypes.Role, r.Name)));
         claims.Add(new Claim(ClaimTypes.Name, user.Login));
-
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+        
         var accessToken = tokenService.GenerateAccessToken(claims);
         var refreshToken = tokenService.GenerateRefreshToken();
 

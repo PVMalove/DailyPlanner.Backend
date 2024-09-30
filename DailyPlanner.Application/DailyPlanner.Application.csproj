@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\DailyPlanner.Domain\DailyPlanner.Domain.csproj" />
       <ProjectReference Include="..\DailyPlanner.Persistence\DailyPlanner.Persistence.csproj" />
+      <ProjectReference Include="..\DailyPlanner.Producer\DailyPlanner.Producer.csproj" />
     </ItemGroup>
 
     <ItemGroup>

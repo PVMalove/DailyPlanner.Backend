@@ -24,7 +24,6 @@ if (app.Environment.IsDevelopment())
         {
             config.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
                 $"Daily Planner swagger {description.GroupName.ToUpperInvariant()}");
-            config.RoutePrefix = String.Empty;
         }
     });
 }
@@ -32,5 +31,7 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x=> x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthorization();
 app.MapControllers();
 app.Run();
